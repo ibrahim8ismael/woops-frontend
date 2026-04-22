@@ -29,6 +29,7 @@ const sidebarLinks = [
   { href: "/products", label: "Products", icon: Package },
   { href: "/conversations", label: "Conversations", icon: MessageSquare },
   { href: "/knowledge-base", label: "Knowledge Base", icon: BookOpen },
+  { href: "/chat", label: "Chat with Atlas", icon: Bot },
   { href: "/channels", label: "Channels", icon: LinkIcon },
   { href: "/analytics", label: "Analytics", icon: BarChart },
 ];
