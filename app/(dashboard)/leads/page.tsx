@@ -3,10 +3,10 @@
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
-  Users, Mail, Phone, Building, DollarSign, Calendar, 
+  Users, Mail, Phone, Building, Calendar, 
   Search, Plus, LayoutGrid, List as ListIcon, 
   MoreHorizontal, ChevronRight, Activity, ArrowUpRight, 
-  MessageSquare, Trash2, X, Target
+  MessageSquare, Trash2, X, Target, Lightbulb
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ interface Lead {
   company: string;
   email: string;
   phone: string;
-  value: number;
+  brief: string; // The core request or ask
   stage: LeadStage;
   source: string;
   notes: string;
@@ -51,33 +51,30 @@ const STAGES: { id: LeadStage; label: string; color: string; border: string; bg:
 const INITIAL_LEADS: Lead[] = [
   {
     id: "L-1001", name: "Sarah Jenkins", company: "TechFlow Solutions", email: "sarah.j@techflow.io", phone: "+1 (555) 123-4567",
-    value: 12500, stage: "new", source: "AI Website Assistant", notes: "Asked about enterprise pricing model.",
+    brief: "Enterprise pricing model inquiry.", stage: "new", source: "AI Website Assistant", notes: "Asked about enterprise pricing model and compliance features. Needs to be followed up by Monday.",
     createdAt: "2024-05-18T09:30:00Z", lastActive: "2024-05-18T09:30:00Z"
   },
   {
     id: "L-1002", name: "Michael Chen", company: "Pinnacle Design", email: "mchen@pinnacledesign.co", phone: "+1 (555) 987-6543",
-    value: 4800, stage: "contacted", source: "Inbound Email", notes: "Followed up regarding their design overhaul project.",
+    brief: "Design overhaul project.", stage: "contacted", source: "Inbound Email", notes: "Followed up regarding their design overhaul project. Awaiting creative brief.",
     createdAt: "2024-05-17T11:20:00Z", lastActive: "2024-05-18T10:15:00Z"
   },
   {
     id: "L-1003", name: "Elena Rodriguez", company: "Global Logistics", email: "elena.r@globallogistics.com", phone: "+1 (555) 456-7890",
-    value: 35000, stage: "qualified", source: "LinkedIn", notes: "Needs integration with 3rd party APIs.",
+    brief: "Needs integration with 3rd party APIs.", stage: "qualified", source: "LinkedIn", notes: "Looking for an immediate solution to tie into their fleet tracking API.",
     createdAt: "2024-05-16T14:45:00Z", lastActive: "2024-05-17T16:00:00Z"
   },
   {
     id: "L-1004", name: "James Wilson", company: "Wilson & Co Advisors", email: "james@wilsonadvisors.net", phone: "+1 (555) 222-3333",
-    value: 8500, stage: "proposal", source: "AI Website Assistant", notes: "Sent proposal draft yesterday. Waiting for review.",
+    brief: "Software adoption and training plan.", stage: "proposal", source: "AI Website Assistant", notes: "Sent proposal draft yesterday. Waiting for review from their steering committee.",
     createdAt: "2024-05-14T08:15:00Z", lastActive: "2024-05-18T09:00:00Z"
   },
   {
     id: "L-1005", name: "Ahmed Hassan", company: "CloudScale Inc", email: "ahmed@cloudscale.io", phone: "+1 (555) 888-9999",
-    value: 55000, stage: "won", source: "Referral", notes: "Signed the contract. Moving to onboarding phase.",
+    brief: "Full cloud migration service.", stage: "won", source: "Referral", notes: "Signed the contract. Moving to onboarding phase next week.",
     createdAt: "2024-05-01T10:00:00Z", lastActive: "2024-05-18T11:00:00Z"
   }
 ];
-
-// Simple formatting utility
-const formatCurrency = (amount: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount);
 
 // Simple Slide-over panel component
 const SlidePanel = ({ isOpen, onClose, title, children }: any) => {
@@ -165,7 +162,7 @@ export default function LeadsPage() {
     } else {
       setActiveLead(null);
       setFormData({
-        name: "", company: "", email: "", phone: "", value: 0, stage: "new", source: "Manual Entry", notes: ""
+        name: "", company: "", email: "", phone: "", brief: "", stage: "new", source: "Manual Entry", notes: ""
       });
     }
     setPanelOpen(true);
@@ -253,7 +250,6 @@ export default function LeadsPage() {
           <div className="flex gap-4 h-full min-w-max px-1">
             {STAGES.map((stage) => {
               const stageLeads = filteredLeads.filter(l => l.stage === stage.id);
-              const totalValue = stageLeads.reduce((sum, l) => sum + l.value, 0);
 
               return (
                 <div 
@@ -270,7 +266,6 @@ export default function LeadsPage() {
                         {stageLeads.length}
                       </span>
                     </div>
-                    {totalValue > 0 && <span className="text-xs font-semibold text-slate-500">{formatCurrency(totalValue)}</span>}
                   </div>
                   
                   <div className={cn(
@@ -326,13 +321,17 @@ export default function LeadsPage() {
                               </p>
                             )}
 
+                            {lead.brief && (
+                              <div className="mb-3">
+                                <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Primary Ask</span>
+                                <p className="text-sm font-medium text-slate-800 line-clamp-2">{lead.brief}</p>
+                              </div>
+                            )}
+
                             <div className="flex items-center justify-between mt-auto">
                               <Badge variant="secondary" className="text-[10px] bg-slate-100 text-slate-600 hover:bg-slate-200">
                                 {lead.source}
                               </Badge>
-                              <span className="text-sm font-semibold text-slate-700">
-                                {formatCurrency(lead.value)}
-                              </span>
                             </div>
                           </motion.div>
                         ))
@@ -353,16 +352,15 @@ export default function LeadsPage() {
                 <tr>
                   <th className="px-6 py-4">Lead</th>
                   <th className="px-6 py-4">Stage</th>
-                  <th className="px-6 py-4">Value</th>
+                  <th className="px-6 py-4 w-1/3">Core Need / Ask</th>
                   <th className="px-6 py-4">Contact</th>
-                  <th className="px-6 py-4">Source</th>
                   <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 bg-white">
                 {filteredLeads.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
+                    <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
                       No leads found matching your criteria.
                     </td>
                   </tr>
@@ -387,17 +385,14 @@ export default function LeadsPage() {
                             {stageConf?.label}
                           </Badge>
                         </td>
-                        <td className="px-6 py-4 font-medium text-slate-900">
-                          {formatCurrency(lead.value)}
+                        <td className="px-6 py-4">
+                          <p className="text-sm text-slate-700 line-clamp-2">{lead.brief || "No brief specified."}</p>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex flex-col gap-1">
                             <div className="flex items-center gap-1.5 text-xs text-slate-600"><Mail className="h-3 w-3" /> {lead.email}</div>
                             <div className="flex items-center gap-1.5 text-xs text-slate-600"><Phone className="h-3 w-3" /> {lead.phone}</div>
                           </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-md">{lead.source}</span>
                         </td>
                         <td className="px-6 py-4 text-right">
                           <Button variant="ghost" size="sm" className="h-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50">
@@ -452,14 +447,6 @@ export default function LeadsPage() {
             </div>
 
             <div className="space-y-2 col-span-2 sm:col-span-1">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Est. Deal Value</label>
-              <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <Input type="number" value={formData.value || ""} onChange={e => setFormData({...formData, value: parseInt(e.target.value) || 0})} className="pl-9" placeholder="5000" />
-              </div>
-            </div>
-
-            <div className="space-y-2 col-span-2 sm:col-span-1">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pipeline Stage</label>
               <select 
                 value={formData.stage || "new"} 
@@ -471,11 +458,21 @@ export default function LeadsPage() {
             </div>
 
             <div className="space-y-2 col-span-2">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Notes & Intent</label>
+              <label className="text-xs font-semibold text-emerald-600 uppercase tracking-wider flex items-center gap-1"><Lightbulb className="h-3.5 w-3.5" /> Primary Ask / Brief</label>
+              <Textarea 
+                value={formData.brief || ""} 
+                onChange={e => setFormData({...formData, brief: e.target.value})} 
+                placeholder="What exactly is the lead looking for? Provide a one-sentence brief." 
+                className="h-16 resize-none border-emerald-100 bg-emerald-50/30 focus-visible:ring-emerald-500"
+              />
+            </div>
+
+            <div className="space-y-2 col-span-2">
+              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Background Notes</label>
               <Textarea 
                 value={formData.notes || ""} 
                 onChange={e => setFormData({...formData, notes: e.target.value})} 
-                placeholder="What is this lead looking for?" 
+                placeholder="Internal notes, next steps, context..." 
                 className="h-24 resize-none"
               />
             </div>
