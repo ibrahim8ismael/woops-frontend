@@ -18,8 +18,10 @@ import {
   Bell,
   Menu,
   X,
-  Package
+  Package,
+  Network
 } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -30,7 +32,7 @@ const sidebarLinks = [
   { href: "/conversations", label: "Conversations", icon: MessageSquare },
   { href: "/knowledge-base", label: "Knowledge Base", icon: BookOpen },
   { href: "/chat", label: "Chat with Atlas", icon: Bot },
-  { href: "/channels", label: "Channels", icon: LinkIcon },
+  { href: "/channels", label: "Channels", icon: Network },
   { href: "/analytics", label: "Analytics", icon: BarChart },
 ];
 
