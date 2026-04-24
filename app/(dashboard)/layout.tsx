@@ -5,40 +5,41 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { 
-  BarChart, 
-  BookOpen, 
-  Bot, 
   HelpCircle, 
-  Home, 
-  LayoutDashboard, 
-  Link as LinkIcon, 
-  MessageSquare, 
   Settings, 
-  Users, 
   Bell,
   Menu,
   X,
-  Package,
-  Network,
   Activity,
   CheckCircle,
   Zap,
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  ChevronLeft,
+  LayoutGrid,
+  ContactRound,
+  Box,
+  MessageCircleMore,
+  Library,
+  Hexagon,
+  Waypoints,
+  LineChart,
+  BrainCircuit,
+  Bot
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const sidebarLinks = [
-  { href: "/dashboard", label: "Home", icon: Home },
-  { href: "/leads", label: "Leads (CRM)", icon: Users },
-  { href: "/products", label: "Products", icon: Package },
-  { href: "/conversations", label: "Conversations", icon: MessageSquare },
-  { href: "/knowledge-base", label: "Knowledge Base", icon: BookOpen },
-  { href: "/chat", label: "Chat with Atlas", icon: Bot },
-  { href: "/channels", label: "Channels", icon: Network },
-  { href: "/analytics", label: "Analytics", icon: BarChart },
+  { href: "/dashboard", label: "Home", icon: LayoutGrid },
+  { href: "/leads", label: "Leads (CRM)", icon: ContactRound },
+  { href: "/products", label: "Products", icon: Box },
+  { href: "/conversations", label: "Conversations", icon: MessageCircleMore },
+  { href: "/knowledge-base", label: "Knowledge Base", icon: Library },
+  { href: "/chat", label: "Chat with Atlas", icon: BrainCircuit },
+  { href: "/channels", label: "Channels", icon: Waypoints },
+  { href: "/analytics", label: "Analytics", icon: LineChart },
 ];
 
 const MOCK_NOTIFICATIONS = [
@@ -48,7 +49,7 @@ const MOCK_NOTIFICATIONS = [
     description: "Sarah Jenkins from TechCorp just landed in your pipeline and needs review.",
     time: "2m ago",
     read: false,
-    icon: Users,
+    icon: ContactRound,
     color: "bg-blue-50 text-blue-600 border-blue-100",
   },
   {
@@ -75,6 +76,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<'usage' | 'notifications' | null>(null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -88,16 +90,41 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Auto-close sidebar on conversations page
+  useEffect(() => {
+    if (pathname.includes("/conversations")) {
+      setIsSidebarCollapsed(true);
+    }
+  }, [pathname]);
+
   return (
     <div className="flex h-screen bg-white">
       {/* Sidebar - Desktop */}
-      <aside className="hidden md:flex w-64 flex-col border-r border-slate-200 bg-[#fbfdfb] shrink-0">
-        <div className="flex bg-transparent h-24 shrink-0 items-center px-8">
+      <motion.aside 
+        initial={false}
+        animate={{ width: isSidebarCollapsed ? 88 : 256 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        className="hidden md:flex flex-col border-r border-slate-200 bg-[#fbfdfb] shrink-0 relative overflow-visible"
+      >
+        <button
+          onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+          className="absolute -right-3 top-8 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-900 shadow-sm hover:bg-slate-50 transition-colors"
+        >
+          {isSidebarCollapsed ? (
+            <ChevronRight className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronLeft className="h-3.5 w-3.5" />
+          )}
+        </button>
+
+        <div className="flex bg-transparent h-24 shrink-0 items-center px-6 overflow-hidden">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <span className="text-4xl font-bold tracking-tighter text-emerald-600">woops</span>
+            <span className={cn("text-4xl font-bold tracking-tighter text-emerald-600 transition-all duration-300", isSidebarCollapsed && "text-2xl mt-1 ml-1")}>
+              {isSidebarCollapsed ? "w" : "woops"}
+            </span>
           </Link>
         </div>
-        <nav className="flex-1 space-y-2 py-4 pl-4 overflow-y-auto">
+        <nav className="flex-1 space-y-2 py-4 pl-4 overflow-x-hidden overflow-y-auto">
           {sidebarLinks.map((link) => {
             const isActive = pathname.startsWith(link.href);
             return (
@@ -105,37 +132,51 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "flex items-center gap-4 py-3.5 pl-4 relative group transition-colors",
-                  isActive ? "" : "hover:bg-slate-50 rounded-l-2xl"
+                  "flex items-center gap-4 py-3.5 relative group transition-colors",
+                  isSidebarCollapsed ? "pl-3.5 pr-4 mr-2" : "pl-4",
+                  isActive ? "" : "hover:bg-slate-50",
+                  !isSidebarCollapsed && !isActive && "rounded-l-2xl",
+                  isSidebarCollapsed && !isActive && "rounded-xl"
                 )}
+                title={isSidebarCollapsed ? link.label : undefined}
               >
                 {isActive && (
                   <>
                     <motion.div
                       layoutId="active-bg-nav"
-                      className="absolute inset-0 bg-emerald-100/60 rounded-l-2xl"
+                      className={cn("absolute inset-0 bg-emerald-100/60", isSidebarCollapsed ? "rounded-xl" : "rounded-l-2xl")}
                       initial={false}
                       transition={{ type: "spring", stiffness: 350, damping: 30 }}
                     />
                     <motion.div
                       layoutId="active-indicator"
-                      className="absolute right-0 top-1.5 bottom-1.5 w-1.5 bg-emerald-600 rounded-l-full"
+                      className={cn("absolute top-1.5 bottom-1.5 w-1.5 bg-emerald-600", isSidebarCollapsed ? "left-0 rounded-r-full" : "right-0 rounded-l-full")}
                       initial={false}
                       transition={{ type: "spring", stiffness: 350, damping: 30 }}
                     />
                   </>
                 )}
-                <div className="z-10 flex items-center gap-4">
-                  <link.icon className={cn("h-[22px] w-[22px] transition-colors", isActive ? "text-slate-900" : "text-slate-700 group-hover:text-slate-900")} strokeWidth={isActive ? 2.5 : 2} />
-                  <span className={cn("text-[15px] transition-colors", isActive ? "font-bold text-slate-900" : "font-medium text-slate-700 group-hover:text-slate-900")}>
-                    {link.label}
-                  </span>
+                <div className="z-10 flex items-center gap-4 whitespace-nowrap">
+                  <div className={cn("flex items-center justify-center", isSidebarCollapsed && "w-6 h-6")}>
+                    <link.icon className={cn("h-[22px] w-[22px] transition-colors", isActive ? "text-slate-900" : "text-slate-700 group-hover:text-slate-900")} strokeWidth={isActive ? 2.5 : 2} />
+                  </div>
+                  {!isSidebarCollapsed && (
+                    <motion.span 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className={cn("text-[15px] transition-colors", isActive ? "font-bold text-slate-900" : "font-medium text-slate-700 group-hover:text-slate-900")}
+                    >
+                      {link.label}
+                    </motion.span>
+                  )}
                 </div>
               </Link>
             );
           })}
         </nav>
-      </aside>
+      </motion.aside>
 
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
