@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { 
   Building, Bot, Shield, Users, Bell, CreditCard, Download, Edit
@@ -17,7 +18,7 @@ export default function SettingsPage() {
     { id: "atlas", label: "Atlas AI Setup", icon: null },
     { id: "teams", label: "Teams", icon: null },
     { id: "notifications", label: "Notifications", icon: null },
-    { id: "billing", label: "Billing", icon: null },
+    { id: "billing", label: "Billing", icon: null, href: "/billing" },
     { id: "export", label: "Data Export", icon: null },
   ];
 
@@ -34,20 +35,36 @@ export default function SettingsPage() {
         {/* Sidebar */}
         <div className="w-full md:w-64 shrink-0 border-r border-slate-100 p-6 flex flex-col gap-1">
           <nav className="flex flex-col space-y-1">
-            {menuItems.map((item) => (
-               <button
-                 key={item.id}
-                 onClick={() => setActiveTab(item.id)}
-                 className={cn(
-                   "flex items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-left",
-                   activeTab === item.id 
-                     ? "bg-emerald-50 text-emerald-700" 
-                     : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                 )}
-               >
-                 {item.label}
-               </button>
-            ))}
+            {menuItems.map((item) => {
+              if (item.href) {
+                return (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    className={cn(
+                      "flex items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-left",
+                      "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              }
+              return (
+                 <button
+                   key={item.id}
+                   onClick={() => setActiveTab(item.id)}
+                   className={cn(
+                     "flex items-center px-4 py-2.5 rounded-xl text-sm font-medium transition-all text-left",
+                     activeTab === item.id 
+                       ? "bg-emerald-50 text-emerald-700" 
+                       : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                   )}
+                 >
+                   {item.label}
+                 </button>
+              );
+            })}
             
             <button
                onClick={() => setActiveTab("delete")}

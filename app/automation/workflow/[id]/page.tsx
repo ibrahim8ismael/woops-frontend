@@ -161,7 +161,7 @@ function WorkflowEditorContent() {
       animated: true,
       type: 'default',
       style: { stroke: '#94a3b8', strokeWidth: 2 }
-    }, eds)),
+    } as Edge, eds)),
     [setEdges]
   );
 
@@ -203,7 +203,7 @@ function WorkflowEditorContent() {
         data: { title, color, iconName, type: configType },
       };
 
-      setNodes((nds) => nds.concat(newNode));
+      setNodes((nds) => nds.concat(newNode as any));
     },
     [screenToFlowPosition, setNodes],
   );
