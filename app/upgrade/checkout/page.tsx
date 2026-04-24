@@ -1,209 +1,197 @@
 import React from "react";
-import { Check, Shield, Layers, ArrowRight, CreditCard, Building } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Check, CreditCard, ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function CheckoutPage() {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
-      <div className="flex-1 w-full max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24 p-6 lg:p-12">
+    <div className="min-h-screen bg-slate-50 flex justify-center py-12 px-4 sm:px-6 lg:px-8 font-sans">
+      <div className="max-w-5xl w-full grid md:grid-cols-[380px_1fr] gap-x-12 gap-y-12 items-start">
         
-        {/* Left Column - Information */}
-        <div className="flex flex-col pt-8">
-          <Link href="/" className="flex items-center gap-2 mb-12">
-            <div className="h-8 w-8 bg-emerald-600 rounded-lg flex items-center justify-center">
-              <Layers className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-extrabold text-xl tracking-tight text-slate-900">Woops</span>
+        {/* Left Column: Summary */}
+        <div className="bg-white rounded-3xl p-8 border border-slate-200/60 shadow-sm sticky top-8">
+          <Link href="/upgrade" className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors mb-6">
+            <ChevronLeft className="h-4 w-4" />
+            Back
           </Link>
-
-          <h1 className="text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
-            Activate Your Woops Pro
-          </h1>
-          <p className="text-slate-600 text-lg mb-12">
-            Get unlimited access to all productivity tools and advanced automations in seconds.
-          </p>
-
-          <h2 className="text-xl font-bold text-slate-900 mb-6">Pro Plan</h2>
-
-          <div className="space-y-4 mb-12">
-            {/* Monthly Plan Option (Selected) */}
-            <label className="flex items-center justify-between p-6 border-2 border-emerald-500 bg-emerald-50/30 rounded-2xl cursor-pointer transition-colors shadow-sm relative overflow-hidden">
-              <div className="flex items-center gap-4">
-                <div className="h-6 w-6 rounded-full border-[6px] border-emerald-600 bg-white" />
-                <div>
-                  <h3 className="font-bold text-slate-900 text-lg">Monthly Plan</h3>
-                  <p className="text-sm text-slate-500 mt-1">Ideal for short-term sprints & trials.</p>
-                </div>
-              </div>
-              <div className="text-right">
-                <span className="text-xl font-extrabold text-slate-900">$29</span>
-                <span className="text-slate-500 font-medium"> / Month</span>
-              </div>
-            </label>
-
-            {/* Annual Plan Option */}
-            <label className="flex items-center justify-between p-6 border-2 border-slate-200 bg-white hover:border-slate-300 rounded-2xl cursor-pointer transition-colors shadow-sm">
-              <div className="flex items-center gap-4">
-                <div className="h-6 w-6 rounded-full border-2 border-slate-300 bg-white" />
-                <div>
-                  <h3 className="font-bold text-slate-900 text-lg">Annual Plan</h3>
-                  <p className="text-sm text-slate-500 mt-1">Commit for a year with <span className="text-emerald-600 font-bold">-20% savings.</span></p>
-                </div>
-              </div>
-              <div className="text-right">
-                <del className="text-sm text-slate-400 block -mb-1">$29</del>
-                <span className="text-xl font-extrabold text-slate-900">$23</span>
-                <span className="text-slate-500 font-medium"> / Month</span>
-              </div>
-            </label>
+          <h2 className="text-xl font-bold text-slate-900 mb-6 tracking-tight">Summary</h2>
+          
+          <div className="flex justify-between items-start mb-2">
+            <div>
+              <h3 className="font-bold text-slate-900">Pro Plan</h3>
+              <p className="text-sm text-slate-500 mt-1">Billed monthly</p>
+            </div>
+            <span className="font-bold text-slate-900">$29.00</span>
           </div>
 
-          <h3 className="font-bold text-slate-900 text-lg flex items-center gap-2 mb-6">
-            What you'll unlock <ArrowRight className="h-5 w-5 text-emerald-600" />
-          </h3>
+          <div className="py-6 border-b border-slate-100 mb-6 space-y-3">
+            <label className="text-[13px] font-bold text-slate-700 block">Discount code</label>
+            <div className="flex gap-2">
+              <input 
+                type="text" 
+                placeholder="Enter code" 
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
+              />
+              <button className="px-5 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-slate-800 transition-colors shadow-sm">
+                Apply
+              </button>
+            </div>
+          </div>
 
-          <ul className="space-y-4 mb-8">
-            {[
-              "5,000 tasks/month",
-              "Unlimited active workflows",
-              "Advanced logic & branching",
-              "Custom webhooks & integrations",
-              "Faster help with priority support"
-            ].map((feature, i) => (
-              <li key={i} className="flex items-center gap-3 text-slate-700 font-medium">
-                <div className="shrink-0 w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center">
-                  <Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={3} />
-                </div>
-                {feature}
-              </li>
-            ))}
-          </ul>
+          <div className="space-y-3 mb-8">
+            <div className="flex justify-between text-sm text-slate-500 font-medium">
+              <span>Subtotal</span>
+              <span>$29.00</span>
+            </div>
+            <div className="flex justify-between font-extrabold text-slate-900 text-[17px] border-t border-slate-100 pt-4">
+              <span>Due today</span>
+              <span>$29.00</span>
+            </div>
+          </div>
 
-          <p className="text-slate-500 text-sm leading-relaxed mt-auto border-t border-slate-200 pt-8">
-            Everything unlocked, synced, and built for speed. Automate in real time, scale your workflow smoothly, and get help fast with priority support.
+          <button className="w-full py-3.5 bg-emerald-600 text-white rounded-xl text-[15px] font-bold hover:bg-emerald-700 transition-all shadow-md hover:shadow-lg active:scale-[0.99]">
+            Continue to confirmation
+          </button>
+          
+          <p className="text-xs text-center text-slate-500 mt-5 font-medium">
+            By continuing, you agree to our <a href="#" className="underline hover:text-slate-900">Terms of Service</a>.
           </p>
         </div>
 
-        {/* Right Column - Payment Form */}
-        <div className="flex flex-col justify-center py-8">
-          <div className="bg-white rounded-[2rem] p-8 lg:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+        {/* Right Column: Payment Details */}
+        <div className="pt-2">
+          {/* Stepper */}
+          <div className="mb-10 lg:mb-12">
+            <h1 className="text-3xl font-extrabold text-slate-900 mb-8 tracking-tight">
+              Upgrade your plan
+            </h1>
             
-            {/* Payment Method Toggle */}
-            <div className="flex p-1 bg-slate-100/80 rounded-xl mb-10">
-              <button className="flex-1 py-2.5 bg-white text-slate-900 font-bold text-sm rounded-lg shadow-sm border border-slate-200/50">
-                Pay by Card
-              </button>
-              <button className="flex-1 py-2.5 text-slate-500 font-bold text-sm rounded-lg hover:text-slate-700 transition-colors">
-                Pay with Paypal
-              </button>
+            <div className="flex items-center gap-2 sm:gap-4 text-sm font-bold">
+              <div className="flex items-center gap-2 text-emerald-600">
+                <div className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center">
+                  <Check className="w-3.5 h-3.5 text-emerald-600" strokeWidth={3} />
+                </div>
+                <span>Choose plan</span>
+              </div>
+              <div className="h-px bg-slate-200 w-8 sm:w-16" />
+              <div className="flex items-center gap-2 text-slate-900">
+                <div className="w-5 h-5 rounded-full border-2 border-slate-900 flex items-center justify-center text-[10px]">
+                  2
+                </div>
+                <span className="border-b-2 border-slate-900 pb-0.5">Payment</span>
+              </div>
+              <div className="h-px bg-slate-200 w-8 sm:w-16" />
+              <div className="flex items-center gap-2 text-slate-400">
+                <div className="w-5 h-5 rounded-full border-2 border-slate-200 flex items-center justify-center text-[10px]">
+                  3
+                </div>
+                <span>Complete</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Payment details */}
+          <div className="mb-10">
+            <div className="pb-4 border-b border-slate-200 mb-6">
+              <h2 className="text-xl font-bold text-slate-900">Payment details</h2>
             </div>
 
-            <div className="space-y-8">
-              {/* Billed To */}
-              <div>
-                <label className="block text-[13px] font-bold text-slate-700 mb-2">Billed To</label>
-                <input 
-                  type="text" 
-                  defaultValue="Bob Snow"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-                />
+            <div className="mb-8">
+              <h3 className="font-bold text-slate-900 mb-1 text-[15px]">Default payment method</h3>
+              <p className="text-[13px] text-slate-500 mb-4">Select a saved payment method.</p>
+              
+              <div className="space-y-3">
+                {/* Saved Method 1 */}
+                <label className="flex items-center gap-4 p-4 border-2 border-emerald-500 bg-emerald-50/20 rounded-2xl cursor-pointer relative transition-all shadow-sm">
+                  <div className="shrink-0 w-12 h-8 bg-white border border-slate-200 rounded flex items-center justify-center">
+                     <span className="text-[10px] font-extrabold text-blue-800 italic tracking-wider">VISA</span>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-slate-900 text-sm">Visa ending in 0315</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">Expires 08/2026</p>
+                    <div className="flex gap-4 mt-2.5 text-[11px] font-bold text-slate-500 underline decoration-slate-300 underline-offset-2">
+                      <button className="hover:text-slate-900 hover:decoration-slate-900 transition-colors">Remove</button>
+                      <button className="hover:text-slate-900 hover:decoration-slate-900 transition-colors">Edit</button>
+                    </div>
+                  </div>
+                  <div className="w-5 h-5 rounded-full border-[5px] border-emerald-600 bg-white shadow-sm" />
+                </label>
+
+                {/* Saved Method 2 */}
+                <label className="flex items-center gap-4 p-4 border border-slate-200 bg-white hover:border-slate-300 rounded-2xl cursor-pointer transition-all shadow-sm group">
+                  <div className="shrink-0 w-12 h-8 bg-white border border-slate-200 rounded flex items-center justify-center">
+                    <span className="text-[10px] font-extrabold text-blue-500 italic tracking-tight">Pay<span className="text-blue-800">Pal</span></span>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-slate-900 text-sm">Jane Smithson</h4>
+                    <p className="text-xs text-slate-500 mt-0.5">j.smith93@gmail.com</p>
+                    <div className="flex gap-4 mt-2.5 text-[11px] font-bold text-slate-500 underline decoration-slate-300 underline-offset-2">
+                      <button className="hover:text-slate-900 hover:decoration-slate-900 transition-colors">Sign out</button>
+                      <button className="hover:text-slate-900 hover:decoration-slate-900 transition-colors">Edit</button>
+                    </div>
+                  </div>
+                  <div className="w-5 h-5 rounded-full border-2 border-slate-300 bg-slate-50 group-hover:bg-white group-hover:border-slate-400 transition-colors" />
+                </label>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-center gap-4 py-2 mb-8">
+              <div className="h-px bg-slate-200 flex-1" />
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">or</span>
+              <div className="h-px bg-slate-200 flex-1" />
+            </div>
+
+            {/* Add new method */}
+            <div>
+              <div className="flex justify-between items-baseline mb-6 pb-4 border-b border-slate-200">
+                <h3 className="text-[17px] font-bold text-slate-900">Add new method</h3>
+                <span className="text-xs text-slate-500 font-medium">* required field</span>
               </div>
 
-              {/* Payment Detail */}
-              <div>
-                <h3 className="text-lg font-bold text-slate-900 mb-4">Payment Detail</h3>
-                
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <label className="flex flex-col items-center justify-center gap-3 p-4 border-2 border-slate-200 rounded-2xl cursor-pointer hover:border-slate-300 transition-colors bg-white">
-                    <Building className="h-6 w-6 text-slate-400" strokeWidth={1.5} />
-                    <span className="font-bold text-slate-700 text-sm">Bank Transfer</span>
-                  </label>
-                  <label className="flex flex-col items-center justify-center gap-3 p-4 border-2 border-emerald-500 rounded-2xl cursor-pointer bg-emerald-50/10 shadow-sm relative overflow-hidden">
-                    <CreditCard className="h-6 w-6 text-emerald-600" strokeWidth={1.5} />
-                    <span className="font-bold text-slate-900 text-sm">Credit Card</span>
-                  </label>
+              <div className="space-y-5">
+                <div>
+                  <label className="block text-[13px] font-bold text-slate-700 mb-2">Name on card*</label>
+                  <input 
+                    type="text" 
+                    placeholder="Enter name"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-sm transition-all"
+                  />
                 </div>
-
-                <div className="space-y-4">
+                
+                <div>
+                  <label className="block text-[13px] font-bold text-slate-700 mb-2">Card number*</label>
                   <div className="relative">
                     <input 
                       type="text" 
-                      placeholder="Card number"
-                      defaultValue="1234 5678 9012 3456"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 tracking-wide font-mono"
+                      placeholder="0000 0000 0000 0000"
+                      className="w-full bg-white border border-slate-200 rounded-xl pl-12 pr-4 py-3 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-sm tracking-widest transition-all font-mono"
                     />
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-1.5 opacity-50">
-                      {/* Simple visual placeholders for card logos */}
-                      <div className="w-8 h-5 bg-red-500 rounded-md"></div>
-                      <div className="w-8 h-5 bg-blue-600 rounded-md"></div>
-                    </div>
+                    <CreditCard className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
                   </div>
+                </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-[13px] font-bold text-slate-700 mb-2">Expiration date*</label>
                     <input 
                       type="text" 
                       placeholder="MM / YY"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-                    />
-                    <input 
-                      type="text" 
-                      placeholder="CVV"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-sm transition-all"
                     />
                   </div>
-
-                  <select className="w-full appearance-none bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:16px] bg-[position:right_16px_center] bg-no-repeat pr-10">
-                    <option>Choose country</option>
-                    <option>United States</option>
-                    <option>United Kingdom</option>
-                    <option>Canada</option>
-                    <option>Australia</option>
-                  </select>
-
-                  <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-[13px] font-bold text-slate-700 mb-2">CVV*</label>
                     <input 
                       type="text" 
-                      placeholder="City"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-                    />
-                    <input 
-                      type="text" 
-                      placeholder="State"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-                    />
-                    <input 
-                      type="text" 
-                      placeholder="ZIP"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                      placeholder="123"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 shadow-sm transition-all"
                     />
                   </div>
-                </div>
-              </div>
-
-              {/* Total & Submit */}
-              <div className="pt-6 border-t border-slate-100">
-                <div className="flex items-end justify-between mb-6">
-                  <span className="text-xl font-bold text-slate-900">Total</span>
-                  <div className="text-right">
-                    <span className="text-2xl font-extrabold text-slate-900">$29</span>
-                    <span className="font-bold text-slate-500"> / Month</span>
-                  </div>
-                </div>
-
-                <button className="w-full py-4 bg-emerald-600 text-white rounded-xl text-[15px] font-bold hover:bg-emerald-700 transition-all shadow-sm mb-4 active:scale-[0.99]">
-                  Subscribe Now
-                </button>
-
-                <div className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
-                  <Shield className="h-5 w-5 text-emerald-600 shrink-0" />
-                  <p className="text-xs text-slate-500 font-medium leading-relaxed">
-                    Your payment data is fully encrypted and handled with the highest security standards.
-                  </p>
                 </div>
               </div>
             </div>
           </div>
+          
         </div>
       </div>
     </div>
