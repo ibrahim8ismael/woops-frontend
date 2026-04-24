@@ -470,43 +470,38 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="flex h-screen bg-white font-sans overflow-hidden">
+    <div className="flex min-h-screen bg-[#FAFAFA] font-sans">
       {/* Left Sidebar */}
-      <div className="hidden lg:flex w-[320px] flex-col border-r border-slate-200 bg-slate-50 p-8 shrink-0">
-        <div className="mb-12">
-          <span className="text-2xl font-black tracking-tighter text-emerald-600">woops</span>
-        </div>
+      <div className="hidden lg:flex w-[320px] xl:w-[360px] flex-col border-r border-slate-200/60 bg-white p-12 shrink-0">
         
-        <h2 className="text-lg font-bold text-slate-900 mb-8 leading-snug">
-          Complete following steps to setup your profile
-        </h2>
-
-        <div className="space-y-6 relative before:absolute before:inset-0 before:ml-[11px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-200 before:to-transparent">
+        {/* Steps List */}
+        <div className="space-y-8 relative before:absolute before:inset-0 before:left-[11px] before:top-2 before:bottom-2 before:w-px before:bg-slate-200/80">
           {stepsList.map((step, index) => {
             const isCompleted = currentStep > step.id;
             const isCurrent = currentStep === step.id;
+            const isFuture = currentStep < step.id;
             
             return (
-              <div key={step.id} className="relative flex items-start gap-4 z-10">
+              <div key={step.id} className="relative flex items-start gap-4 z-10 group">
                 <div className={cn(
-                  "flex items-center justify-center shrink-0 w-6 h-6 rounded-full mt-0.5 z-10 bg-slate-50",
+                  "flex items-center justify-center shrink-0 w-6 h-6 rounded-md z-10 text-[11px] font-bold transition-all duration-200",
+                  (isCurrent || isCompleted) 
+                    ? "bg-slate-900 text-white shadow-sm" 
+                    : "bg-slate-100 text-slate-400"
                 )}>
-                  {isCompleted ? (
-                    <CheckCircle2 className="h-6 w-6 text-emerald-500 fill-emerald-50" />
-                  ) : isCurrent ? (
-                    <div className="h-6 w-6 rounded-full border-[5px] border-emerald-500 bg-white" />
-                  ) : (
-                    <div className="h-4 w-4 bg-slate-200 rounded-full m-1" />
-                  )}
+                  {step.id}
                 </div>
-                <div>
+                <div className="-mt-0.5">
                   <h3 className={cn(
-                    "text-[15px] font-bold transition-colors mb-1",
-                    isCurrent ? "text-slate-900" : isCompleted ? "text-slate-700" : "text-slate-400"
+                    "text-[15px] font-semibold transition-colors mb-0.5",
+                    (isCurrent || isCompleted) ? "text-slate-900" : "text-slate-400"
                   )}>
-                    {step.title} {index > 2 && <span className="text-slate-400 font-normal text-[13px]">(optional)</span>}
+                    {step.title}
                   </h3>
-                  <p className="text-[13px] text-slate-500 leading-relaxed font-medium">
+                  <p className={cn(
+                    "text-[13px] leading-relaxed font-medium transition-colors",
+                    (isCurrent || isCompleted) ? "text-slate-500" : "text-slate-400/80"
+                  )}>
                     {step.desc}
                   </p>
                 </div>
@@ -514,27 +509,25 @@ export default function OnboardingPage() {
             );
           })}
         </div>
-
-        <div className="mt-auto pt-8">
-          <button className="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors shadow-sm">
-            <span className="flex items-center justify-center h-5 w-5 bg-slate-900 text-white rounded-full text-[10px]">?</span>
-            Help
-          </button>
-        </div>
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col relative overflow-y-auto">
-        <div className="flex-1 max-w-4xl w-full mx-auto p-8 md:p-12 lg:p-16 flex flex-col">
+      <div className="flex-1 flex flex-col p-8 md:p-12 lg:p-16 overflow-y-auto">
+        <div className="max-w-3xl w-full mx-auto">
           
-          <div className="mb-8">
-            <span className="text-emerald-600 font-bold text-sm tracking-wide mb-2 block">
-              Step {currentStep} of {totalSteps}
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+          {/* Logo & Header */}
+          <div className="mb-10">
+            <div className="mb-10 flex items-center gap-2.5">
+              <div className="h-8 w-8 bg-emerald-600 rounded-lg flex items-center justify-center shrink-0 shadow-sm shadow-emerald-500/20">
+                <span className="text-white font-black text-xl leading-none">w</span>
+              </div>
+              <span className="text-xl font-black tracking-tight text-slate-900">woops</span>
+            </div>
+
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">
               {activeStepConfig.title}
             </h1>
-            <p className="text-slate-500 font-medium">
+            <p className="text-[15px] text-slate-500 font-medium">
               {currentStep === 4 
                 ? "Please select one or multiple channels from available ones to connect." 
                 : currentStep === 5 
@@ -543,13 +536,13 @@ export default function OnboardingPage() {
             </p>
           </div>
 
-          <div className="flex-1 pb-24">
+          <div className="pb-10">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.2 }}
               >
                 {getStepContent()}
@@ -557,37 +550,39 @@ export default function OnboardingPage() {
             </AnimatePresence>
           </div>
 
-        </div>
-
-        {/* Footer Actions */}
-        <div className="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-6 md:px-12 flex items-center justify-between z-20">
-          <button
-            onClick={handleBack}
-            className={cn(
-              "flex items-center gap-2 text-sm font-bold px-4 py-2 hover:bg-slate-50 rounded-xl transition-colors text-slate-600",
-              currentStep === 1 && "opacity-0 pointer-events-none"
-            )}
-          >
-            <ChevronRight className="h-4 w-4 rotate-180" /> Back
-          </button>
-          
-          <div className="flex items-center gap-3">
-            {currentStep > 2 && (
+          {/* Action Buttons */}
+          <div className="pt-8 border-t border-slate-200/60 flex items-center justify-between">
+            {currentStep > 1 ? (
               <button
-                onClick={handleSkip}
-                className="px-6 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-600 bg-white hover:bg-slate-50 transition-colors shadow-sm"
+                onClick={handleBack}
+                className="flex items-center gap-1.5 text-[14px] font-semibold px-4 py-2 hover:bg-slate-100 rounded-lg transition-colors text-slate-600"
               >
-                Skip
+                <ChevronRight className="h-4 w-4 rotate-180" /> Back
               </button>
+            ) : (
+              <div /> // Placeholder for space-between 
             )}
-            <button
-              onClick={handleNext}
-              disabled={!canProceed()}
-              className="px-8 py-2.5 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:hover:bg-emerald-600 transition-colors shadow-sm shadow-emerald-600/20"
-            >
-              {currentStep === totalSteps ? "Finish" : "Continue"}
-            </button>
+            
+            <div className="flex items-center gap-3">
+              {currentStep > 2 && (
+                <button
+                  onClick={handleSkip}
+                  className="px-5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 bg-white hover:bg-slate-50 transition-colors shadow-sm"
+                >
+                  Skip
+                </button>
+              )}
+              <button
+                onClick={handleNext}
+                disabled={!canProceed()}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:hover:bg-emerald-600 transition-all shadow-sm shadow-emerald-500/20"
+              >
+                {currentStep === totalSteps ? "Finish" : "Continue"}
+                {currentStep < totalSteps && <ChevronRight className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
+          
         </div>
       </div>
     </div>
