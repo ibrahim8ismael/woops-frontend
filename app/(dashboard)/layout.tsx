@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
@@ -19,7 +19,12 @@ import {
   Menu,
   X,
   Package,
-  Network
+  Network,
+  Activity,
+  CheckCircle,
+  Zap,
+  Sparkles,
+  ChevronRight
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -36,9 +41,52 @@ const sidebarLinks = [
   { href: "/analytics", label: "Analytics", icon: BarChart },
 ];
 
+const MOCK_NOTIFICATIONS = [
+  {
+    id: 1,
+    title: "New Lead Assigned",
+    description: "Sarah Jenkins from TechCorp just landed in your pipeline and needs review.",
+    time: "2m ago",
+    read: false,
+    icon: Users,
+    color: "bg-blue-50 text-blue-600 border-blue-100",
+  },
+  {
+    id: 2,
+    title: "Atlas AI Summary Ready",
+    description: "Your weekly performance digest has been generated effectively.",
+    time: "1h ago",
+    read: false,
+    icon: Zap,
+    color: "bg-amber-50 text-amber-500 border-amber-100",
+  },
+  {
+    id: 3,
+    title: "Flowmono Connected",
+    description: "Your integration channel Flowmono Process Manager is now active.",
+    time: "3h ago",
+    read: true,
+    icon: CheckCircle,
+    color: "bg-emerald-50 text-emerald-600 border-emerald-100",
+  }
+];
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<'usage' | 'notifications' | null>(null);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="flex h-screen bg-white">
@@ -102,32 +150,169 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Menu className="h-5 w-5" />
           </Button>
 
-          <div className="ml-auto flex items-center gap-4">
-            <Button variant="outline" size="sm" className="hidden sm:flex rounded-full gap-2 font-normal text-slate-600 border-slate-200 shadow-none hover:bg-slate-50">
+          <div className="ml-auto flex items-center gap-2 sm:gap-4" ref={dropdownRef}>
+            
+            <Button variant="outline" size="sm" className="hidden sm:flex rounded-full gap-2 font-normal text-slate-600 border-slate-200 shadow-none hover:bg-slate-50 mr-2">
               <Bot className="h-4 w-4 text-emerald-500" /> Ask AI
             </Button>
-            <div className="hidden sm:flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 cursor-pointer px-2">
-              <Activity className="h-4 w-4" /> Usage and plan
+
+            {/* Usage & Plan Dropdown */}
+            <div className="relative">
+              <div 
+                onClick={() => setActiveDropdown(activeDropdown === 'usage' ? null : 'usage')}
+                className={cn(
+                  "hidden sm:flex items-center gap-2 text-sm font-medium cursor-pointer px-3 py-1.5 rounded-full transition-colors",
+                  activeDropdown === 'usage' ? "bg-slate-100 text-slate-900" : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                )}
+              >
+                <Activity className="h-4 w-4" /> Usage and plan
+              </div>
+              
+              <AnimatePresence>
+                {activeDropdown === 'usage' && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 top-full mt-3 w-[340px] bg-white rounded-[24px] shadow-[0_12px_40px_rgba(0,0,0,0.08)] border border-slate-100 p-5 z-50 origin-top-right"
+                  >
+                    <div className="flex items-center justify-between mb-5">
+                      <h3 className="font-bold text-slate-900 text-base">Usage & Plan</h3>
+                      <span className="text-[10px] font-bold tracking-widest uppercase bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full">Pro Plan</span>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {/* Active Leads Metric */}
+                      <div>
+                        <div className="flex justify-between text-xs font-medium mb-1.5">
+                          <span className="text-slate-600">Active Leads</span>
+                          <span className="text-slate-900 font-bold">423 / 500</span>
+                        </div>
+                        <div className="h-[6px] w-full bg-slate-100 rounded-full overflow-hidden">
+                          <div className="h-full bg-blue-500 rounded-full" style={{ width: '85%' }} />
+                        </div>
+                      </div>
+
+                      {/* AI Tasks Metric */}
+                      <div>
+                        <div className="flex justify-between text-xs font-medium mb-1.5">
+                          <span className="text-slate-600">Atlas AI Tasks</span>
+                          <span className="text-slate-900 font-bold">8.4k / 10k</span>
+                        </div>
+                        <div className="h-[6px] w-full bg-slate-100 rounded-full overflow-hidden">
+                          <div className="h-full bg-emerald-500 rounded-full" style={{ width: '84%' }} />
+                        </div>
+                      </div>
+
+                      {/* Storage Metric */}
+                      <div>
+                        <div className="flex justify-between text-xs font-medium mb-1.5">
+                          <span className="text-slate-600">Cloud Storage</span>
+                          <span className="text-slate-900 font-bold">2.1GB / 5GB</span>
+                        </div>
+                        <div className="h-[6px] w-full bg-slate-100 rounded-full overflow-hidden">
+                          <div className="h-full bg-amber-500 rounded-full" style={{ width: '42%' }} />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-5 pt-4 border-t border-slate-100">
+                      <button className="w-full flex items-center justify-center gap-2 py-2.5 bg-slate-900 text-white text-sm font-bold rounded-[14px] hover:bg-slate-800 transition-colors">
+                        <Sparkles className="h-4 w-4" /> Upgrade Plan
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-1 sm:gap-2">
                <Button variant="ghost" size="icon" className="text-slate-500 rounded-full">
                  <HelpCircle className="h-5 w-5" />
                </Button>
+               
                <Link href="/settings">
                  <Button variant="ghost" size="icon" className="text-slate-500 rounded-full">
                    <Settings className="h-5 w-5" />
                  </Button>
                </Link>
-               <Button variant="ghost" size="icon" className="text-slate-500 rounded-full relative">
-                 <Bell className="h-5 w-5" />
-                 <span className="absolute top-1.5 right-2 h-2 w-2 rounded-full bg-red-500 border-2 border-white" />
-               </Button>
+
+               {/* Notifications Dropdown */}
+               <div className="relative">
+                 <Button 
+                   variant="ghost" 
+                   size="icon" 
+                   className={cn(
+                     "text-slate-500 rounded-full relative transition-colors",
+                     activeDropdown === 'notifications' && "bg-slate-100 text-slate-900"
+                   )}
+                   onClick={() => setActiveDropdown(activeDropdown === 'notifications' ? null : 'notifications')}
+                 >
+                   <Bell className="h-5 w-5" />
+                   <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 border-2 border-white" />
+                 </Button>
+
+                 <AnimatePresence>
+                  {activeDropdown === 'notifications' && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute right-0 top-full mt-3 w-[360px] bg-white rounded-[24px] shadow-[0_12px_40px_rgba(0,0,0,0.08)] border border-slate-100 p-2 z-50 origin-top-right overflow-hidden flex flex-col"
+                    >
+                      <div className="flex items-center justify-between p-4 pb-2">
+                        <h3 className="font-bold text-slate-900 text-base">Notifications</h3>
+                        <button className="text-xs font-semibold text-emerald-600 hover:text-emerald-700">Mark all as read</button>
+                      </div>
+
+                      <div className="flex flex-col gap-1 p-2 max-h-[380px] overflow-y-auto">
+                        {MOCK_NOTIFICATIONS.map((notif) => (
+                          <div 
+                            key={notif.id} 
+                            className={cn(
+                              "flex gap-3 p-3 rounded-[16px] hover:bg-slate-50 transition-colors cursor-pointer",
+                              !notif.read && "bg-slate-50/50"
+                            )}
+                          >
+                            <div className={cn("h-10 w-10 rounded-full border flex items-center justify-center shrink-0", notif.color)}>
+                              <notif.icon className="h-5 w-5" />
+                            </div>
+                            <div className="flex flex-col gap-0.5 pt-0.5">
+                              <div className="flex items-center justify-between">
+                                <span className={cn("text-sm font-bold", notif.read ? "text-slate-700" : "text-slate-900")}>
+                                  {notif.title}
+                                </span>
+                                {!notif.read && <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 mr-1" />}
+                              </div>
+                              <p className="text-xs text-slate-500 font-medium leading-relaxed pr-2">
+                                {notif.description}
+                              </p>
+                              <span className="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-wider">
+                                {notif.time}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="p-2 pt-1">
+                        <button className="w-full flex items-center justify-center gap-1 py-2.5 text-xs font-bold text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-[12px] transition-colors">
+                          View all activity <ChevronRight className="h-3 w-3" />
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                 </AnimatePresence>
+               </div>
             </div>
-            <div className="flex items-center gap-2 pl-4 border-l border-slate-200 cursor-pointer">
-              <div className="h-8 w-8 rounded-sm bg-slate-900 text-white flex items-center justify-center text-xs font-semibold">
+
+            <div className="flex items-center gap-2 pl-2 sm:pl-4 sm:border-l border-slate-200 cursor-pointer ml-1">
+              <div className="h-8 w-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-semibold">
                 JD
               </div>
-              <span className="text-sm font-medium hidden sm:block">John Doe</span>
+              <span className="text-sm font-bold hidden sm:block text-slate-700">John Doe</span>
             </div>
           </div>
         </header>
@@ -205,24 +390,4 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </div>
     </div>
   );
-}
-
-// Simple Activity icon since it might not be imported correctly above
-function Activity(props: React.ComponentProps<"svg">) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-    </svg>
-  )
 }
