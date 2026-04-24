@@ -356,22 +356,23 @@ export default function ConversationsPage() {
             {/* Message Input Container */}
             <div className="p-4 bg-white border-t border-slate-200 shrink-0">
               <div className="flex items-end gap-2 max-w-4xl mx-auto">
-                <Button variant="ghost" size="icon" className="shrink-0 text-slate-400 hover:text-slate-600 h-10 w-10">
+                <Button variant="ghost" size="icon" disabled={isAiActive} className="shrink-0 text-slate-400 hover:text-slate-600 h-10 w-10 disabled:opacity-50">
                   <Paperclip className="h-5 w-5" />
                 </Button>
                 <div className="relative flex-1">
                   <textarea 
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
-                    placeholder="Type your message..." 
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm resize-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-500 min-h-[44px] max-h-[120px]"
+                    disabled={isAiActive}
+                    placeholder={isAiActive ? "AI Auto-Reply is active..." : "Type your message..."} 
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm resize-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-500 min-h-[44px] max-h-[120px] disabled:opacity-60 disabled:cursor-not-allowed"
                     rows={1}
                   />
-                  <Button variant="ghost" size="icon" className="absolute right-2 bottom-2 h-7 w-7 text-slate-400 hover:text-slate-600">
+                  <Button variant="ghost" size="icon" disabled={isAiActive} className="absolute right-2 bottom-2 h-7 w-7 text-slate-400 hover:text-slate-600 disabled:opacity-50">
                     <Smile className="h-5 w-5" />
                   </Button>
                 </div>
-                <Button size="icon" className="shrink-0 bg-emerald-600 hover:bg-emerald-700 h-10 w-10 rounded-full shadow-sm text-white" disabled={!replyText.trim()}>
+                <Button size="icon" className="shrink-0 bg-emerald-600 hover:bg-emerald-700 h-10 w-10 rounded-full shadow-sm text-white disabled:opacity-50" disabled={isAiActive || !replyText.trim()}>
                   <Send className="h-4 w-4 ml-0.5" />
                 </Button>
               </div>

@@ -38,6 +38,7 @@ const sidebarLinks = [
   { href: "/conversations", label: "Conversations", icon: MessageCircleMore },
   { href: "/knowledge-base", label: "Knowledge Base", icon: Library },
   { href: "/chat", label: "Chat with Atlas", icon: BrainCircuit },
+  { href: "/automations", label: "Automations", icon: Zap },
   { href: "/channels", label: "Channels", icon: Waypoints },
   { href: "/analytics", label: "Analytics", icon: LineChart },
 ];
@@ -425,9 +426,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* Page Content */}
         <main className={cn(
           "flex-1 bg-slate-50/50",
-          pathname.includes("/conversations") ? "p-0 overflow-hidden" : "p-6 md:p-8 overflow-y-auto"
+          (pathname.includes("/conversations") || pathname.includes("/automations")) ? "p-0 overflow-hidden" : "p-6 md:p-8 overflow-y-auto"
         )}>
-          <div className={cn("mx-auto", pathname.includes("/conversations") ? "max-w-none h-full" : "max-w-6xl")}>
+          <div className={cn("mx-auto", (pathname.includes("/conversations") || pathname.includes("/automations")) ? "max-w-none h-full" : "max-w-6xl")}>
             {children}
           </div>
         </main>
