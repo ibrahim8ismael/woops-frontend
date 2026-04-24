@@ -1,6 +1,6 @@
 {
-  "name": "woops-dashboard",
-  "description": "",
+  "name": "Woops",
+  "description": "Simple, guided automation platform for real-world use cases.",
   "requestFramePermissions": [],
   "majorCapabilities": []
 }

@@ -93,9 +93,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   // Auto-close sidebar on conversations page
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
     if (pathname.includes("/conversations")) {
-      setIsSidebarCollapsed(true);
+      timeoutId = setTimeout(() => setIsSidebarCollapsed(true), 0);
     }
+    return () => clearTimeout(timeoutId);
   }, [pathname]);
 
   return (

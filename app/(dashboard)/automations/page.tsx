@@ -1,43 +1,55 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus, Search, MoreHorizontal, Zap, Clock, ShieldAlert, Cpu, Globe, Check } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, Play, Pause, Zap, Clock, Globe, CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 const AUTOMATIONS = [
   {
-    id: "workflow-1",
+    id: "dbd425372",
     name: "Incident Monitoring Flow",
-    description: "Standardize incoming payload and generate alerts",
-    trigger: { icon: Clock, type: "Schedule" },
+    date: "Aug 2, 2025 9:34 am",
+    executions: "12,467",
+    status: "active",
+    icon: Clock,
     iconColor: "bg-emerald-500",
-    actionsCount: 4,
-    status: "active",
-    lastRun: "2 mins ago",
-    createdAt: "Oct 12, 2023",
   },
   {
-    id: "workflow-2",
+    id: "dbd425373",
     name: "New Ticket Triage",
-    description: "Analyze incoming support tickets with AI",
-    trigger: { icon: Globe, type: "Webhook" },
-    iconColor: "bg-blue-500",
-    actionsCount: 6,
+    date: "Aug 2, 2025 5:04 pm",
+    executions: "1,547",
     status: "active",
-    lastRun: "1 hour ago",
-    createdAt: "Nov 4, 2023",
+    icon: Globe,
+    iconColor: "bg-blue-500",
   },
   {
-    id: "workflow-3",
+    id: "dbd425374",
     name: "Weekly Analytics Report",
-    description: "Gather data and send email to stakeholders",
-    trigger: { icon: Clock, type: "Schedule" },
+    date: "Aug 25, 2025 1:28 am",
+    executions: "245",
+    status: "active",
+    icon: Clock,
     iconColor: "bg-purple-500",
-    actionsCount: 3,
+  },
+  {
+    id: "dbd425375",
+    name: "Welcome Email Sequence",
+    date: "Aug 17, 2025 10:39 pm",
+    executions: "21,547",
+    status: "active",
+    icon: Zap,
+    iconColor: "bg-rose-500",
+  },
+  {
+    id: "dbd425376",
+    name: "Inactive User Cleanup",
+    date: "Aug 6, 2025 10:36 am",
+    executions: "654",
     status: "inactive",
-    lastRun: "3 days ago",
-    createdAt: "Dec 1, 2023",
+    icon: Clock,
+    iconColor: "bg-slate-500",
   },
 ];
 
@@ -50,111 +62,134 @@ export default function AutomationsListPage() {
   );
 
   return (
-    <div className="flex flex-col h-full space-y-8 pb-12">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Automations</h1>
-          <p className="text-sm font-medium text-slate-500 mt-1">
-            Build and manage powerful workflows to automate your processes.
-          </p>
-        </div>
-        <button 
-          onClick={() => router.push('/workflow/new')}
-          className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-emerald-700 transition-colors shadow-sm shadow-emerald-500/20"
-        >
-          <Plus className="h-4 w-4" />
-          Create Workflow
-        </button>
-      </div>
-
-      {/* Controls */}
-      <div className="flex items-center gap-4">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search workflows..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-slate-400"
-          />
-        </div>
-        <div className="flex items-center gap-2 text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-xl px-4 py-2.5">
-          <span className="text-slate-400">Sort by:</span>
-          <select className="bg-transparent border-none focus:outline-none appearance-none cursor-pointer">
-            <option>Last Edited</option>
-            <option>Name (A-Z)</option>
-            <option>Status</option>
-          </select>
-        </div>
-      </div>
-
-      {/* List */}
-      <div className="grid gap-4">
-        {filteredAutomations.map((automation) => (
-          <div 
-            key={automation.id} 
-            className="group flex flex-col sm:flex-row sm:items-center justify-between p-5 bg-white border border-slate-200 rounded-2xl hover:shadow-[0_4px_20px_rgba(0,0,0,0.04)] hover:border-slate-300 transition-all gap-6 cursor-pointer"
-            onClick={() => router.push(`/workflow/${automation.id}`)}
+    <div className="flex flex-col h-full bg-slate-50/50 p-6 sm:p-10 lg:p-14 overflow-y-auto w-full">
+      <div className="max-w-7xl mx-auto w-full space-y-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Automations</h1>
+            <p className="text-sm font-medium text-slate-500 mt-1">
+              Build and manage powerful workflows to automate your processes.
+            </p>
+          </div>
+          <button 
+            onClick={() => router.push('/automation/workflow/new')}
+            className="flex items-center gap-2 bg-emerald-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-emerald-700 transition-colors shadow-sm shadow-emerald-500/20 shrink-0"
           >
-            {/* Info */}
-            <div className="flex items-start gap-4">
-              <div className={cn("h-12 w-12 rounded-xl flex items-center justify-center shrink-0 bg-opacity-10", automation.iconColor.replace('bg-', 'bg-').replace('-500', '-500/10'))}>
-                <Zap className={cn("h-6 w-6", automation.iconColor.replace('bg-', 'text-'))} />
-              </div>
-              <div>
-                <div className="flex items-center gap-3 mb-1">
-                  <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">{automation.name}</h3>
-                  <div className={cn(
-                    "px-2 py-0.5 rounded-md text-[11px] font-bold tracking-wide uppercase flex items-center gap-1",
-                    automation.status === 'active' 
-                      ? "bg-emerald-50 text-emerald-600 border border-emerald-100" 
-                      : "bg-slate-100 text-slate-500 border border-slate-200"
-                  )}>
-                    {automation.status === 'active' && <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />}
-                    {automation.status}
-                  </div>
-                </div>
-                <p className="text-sm font-medium text-slate-500">
-                  {automation.description}
-                </p>
-                <div className="flex items-center gap-4 mt-3 text-[13px] font-medium text-slate-400">
-                  <span className="flex items-center gap-1.5">
-                    <automation.trigger.icon className="h-3.5 w-3.5" />
-                    {automation.trigger.type}
-                  </span>
-                  <div className="h-1 w-1 rounded-full bg-slate-300" />
-                  <span>{automation.actionsCount} steps</span>
-                  <div className="h-1 w-1 rounded-full bg-slate-300" />
-                  <span>Last run {automation.lastRun}</span>
-                </div>
-              </div>
-            </div>
+            <Plus className="h-4 w-4" />
+            Create Workflow
+          </button>
+        </div>
 
-            {/* Actions */}
-            <div className="flex items-center gap-4 sm:border-l border-slate-100 sm:pl-6">
-              <div className="flex flex-col items-end gap-2">
+        {/* Controls */}
+        <div className="flex items-center gap-4">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search workflows..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all placeholder:text-slate-400 shadow-[0_2px_10px_rgba(0,0,0,0.02)]"
+            />
+          </div>
+        </div>
+
+        {/* List */}
+        <div className="grid gap-3">
+          {filteredAutomations.map((automation) => (
+            <div 
+              key={automation.id} 
+              className="group flex flex-col xl:flex-row xl:items-center p-4 bg-white border border-slate-100 rounded-2xl hover:shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:border-slate-200 transition-all cursor-pointer shadow-sm gap-4 xl:gap-0"
+              onClick={() => router.push(`/automation/workflow/${automation.id}`)}
+            >
+              {/* Info Column */}
+              <div className="flex items-center gap-4 w-[280px] shrink-0">
+                <div className={cn("h-10 w-10 rounded-full flex items-center justify-center shrink-0 bg-opacity-10", automation.iconColor.replace('bg-', 'bg-').replace('-500', '-500/10'))}>
+                  <automation.icon className={cn("h-5 w-5", automation.iconColor.replace('bg-', 'text-'))} />
+                </div>
+                <div className="min-w-0">
+                  <h3 className="font-bold text-slate-900 group-hover:text-emerald-600 transition-colors truncate text-[14px]">
+                    {automation.name}
+                  </h3>
+                  <p className="text-xs font-medium text-slate-400 truncate">
+                    {automation.id}
+                  </p>
+                </div>
+              </div>
+
+              {/* Data Columns */}
+              <div className="flex items-center flex-1 justify-between px-0 xl:px-4 text-[13px] font-medium text-slate-600 gap-4 overflow-x-auto no-scrollbar">
+                <div className="w-[160px] shrink-0 truncate">{automation.date}</div>
+                <div className="w-[100px] shrink-0 text-slate-900 font-semibold">{automation.executions}</div>
+                
+                {/* Wavy Graph Placeholder */}
+                <div className="hidden lg:block w-[120px] h-[30px] opacity-60 shrink-0">
+                  <svg viewBox="0 0 100 30" className="w-full h-full drop-shadow-sm" preserveAspectRatio="none">
+                    <path d="M0,15 C20,5 30,25 50,15 C70,5 80,25 100,15" fill="none" strokeWidth="2"
+                          className={automation.status === 'active' ? "stroke-emerald-400" : "stroke-slate-300"} />
+                  </svg>
+                </div>
+
+                {/* Status Badges matched to screenshot */}
+                <div className="w-[90px] shrink-0 flex justify-end">
+                  {automation.status === 'active' ? (
+                    <div className="flex items-center gap-1.5 text-emerald-500 text-xs font-bold bg-emerald-50 px-2 py-1 rounded-md">
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      Active
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5 text-rose-500 text-xs font-bold bg-rose-50 px-2 py-1 rounded-md">
+                      <XCircle className="h-3.5 w-3.5" />
+                      Inactive
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-2 xl:pl-6 xl:border-l border-slate-100 xl:ml-4 shrink-0 pt-4 xl:pt-0 border-t xl:border-t-0 mt-2 xl:mt-0 justify-end w-full xl:w-auto">
                 <button
-                  className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"
+                  className={cn(
+                    "p-2 rounded-lg transition-colors border",
+                    automation.status === 'active' 
+                      ? "text-slate-500 hover:text-amber-600 hover:bg-amber-50 border-slate-200 hover:border-amber-200" 
+                      : "text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 border-slate-200 hover:border-emerald-200"
+                  )}
                   onClick={(e) => { e.stopPropagation(); /* Menu Handler */ }}
+                  title={automation.status === 'active' ? "Pause Automation" : "Resume Automation"}
                 >
-                  <MoreHorizontal className="h-5 w-5" />
+                  {automation.status === 'active' ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                </button>
+                <button
+                  className="p-2 text-blue-600 bg-white hover:bg-blue-50 rounded-lg transition-colors border border-slate-200 hover:border-blue-200"
+                  onClick={(e) => { e.stopPropagation(); /* Menu Handler */ }}
+                  title="Edit Automation"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
+                <button
+                  className="p-2 text-rose-600 bg-white hover:bg-rose-50 rounded-lg transition-colors border border-slate-200 hover:border-rose-200"
+                  onClick={(e) => { e.stopPropagation(); /* Menu Handler */ }}
+                  title="Delete Automation"
+                >
+                  <Trash2 className="h-4 w-4" />
                 </button>
               </div>
+              
             </div>
-            
-          </div>
-        ))}
+          ))}
 
-        {filteredAutomations.length === 0 && (
-          <div className="text-center py-16 bg-slate-50 border border-slate-200 border-dashed rounded-2xl">
-            <Zap className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-slate-900 mb-2">No workflows found</h3>
-            <p className="text-slate-500 font-medium">Try adjusting your search or create a new automation.</p>
-          </div>
-        )}
+          {filteredAutomations.length === 0 && (
+            <div className="text-center py-16 bg-white border border-slate-200 border-dashed rounded-2xl shadow-sm">
+              <Zap className="h-12 w-12 text-slate-300 mx-auto mb-4" />
+              <h3 className="text-lg font-bold text-slate-900 mb-2">No workflows found</h3>
+              <p className="text-slate-500 font-medium">Try adjusting your search or create a new automation.</p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
+
