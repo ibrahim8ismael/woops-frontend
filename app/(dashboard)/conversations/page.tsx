@@ -103,7 +103,7 @@ export default function ConversationsPage() {
   const isAiActive = selectedChat ? (aiEnabledChats[selectedChat.id] ?? true) : true;
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] -mx-6 -my-6 bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+    <div className="flex h-[calc(100vh-4rem)] w-full bg-white overflow-hidden">
       
       {/* Left Sidebar (Filters) */}
       <div className="w-56 border-r border-slate-200 bg-slate-50/50 flex flex-col hidden md:flex shrink-0">
@@ -356,30 +356,37 @@ export default function ConversationsPage() {
             {/* Message Input Container */}
             <div className="p-4 bg-white border-t border-slate-200 shrink-0">
               <div className="flex items-end gap-2 max-w-4xl mx-auto">
-                <Button variant="ghost" size="icon" className="shrink-0 text-slate-400 hover:text-slate-600 h-10 w-10">
+                <Button variant="ghost" size="icon" className="shrink-0 text-slate-400 hover:text-slate-600 h-10 w-10" disabled={isAiActive}>
                   <Paperclip className="h-5 w-5" />
                 </Button>
                 <div className="relative flex-1">
                   <textarea 
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
-                    placeholder="Type your message..." 
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm resize-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-500 min-h-[44px] max-h-[120px]"
+                    placeholder={isAiActive ? "Pause AI Auto-Reply to write a message..." : "Type your message..."} 
+                    className={cn(
+                      "w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm resize-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-500 min-h-[44px] max-h-[120px]",
+                      isAiActive && "cursor-not-allowed opacity-60 bg-slate-100"
+                    )}
                     rows={1}
+                    disabled={isAiActive}
                   />
-                  <Button variant="ghost" size="icon" className="absolute right-2 bottom-2 h-7 w-7 text-slate-400 hover:text-slate-600">
+                  <Button variant="ghost" size="icon" className="absolute right-2 bottom-2 h-7 w-7 text-slate-400 hover:text-slate-600" disabled={isAiActive}>
                     <Smile className="h-5 w-5" />
                   </Button>
                 </div>
-                <Button size="icon" className="shrink-0 bg-emerald-600 hover:bg-emerald-700 h-10 w-10 rounded-full shadow-sm text-white" disabled={!replyText.trim()}>
+                <Button size="icon" className="shrink-0 bg-emerald-600 hover:bg-emerald-700 h-10 w-10 rounded-full shadow-sm text-white" disabled={isAiActive || !replyText.trim()}>
                   <Send className="h-4 w-4 ml-0.5" />
                 </Button>
               </div>
               <div className="text-center mt-2 flex items-center justify-center gap-4">
                 <span className="text-[10px] text-slate-400">Shift + Enter for new line</span>
-                <span className="text-[10px] px-1.5 py-0.5 bg-emerald-50 text-emerald-600 font-medium rounded border border-emerald-100 flex items-center gap-1 cursor-pointer hover:bg-emerald-100 transition-colors">
+                <button 
+                  disabled={isAiActive}
+                  className="text-[10px] px-1.5 py-0.5 bg-emerald-50 text-emerald-600 font-medium rounded border border-emerald-100 flex items-center gap-1 cursor-pointer hover:bg-emerald-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                   <BotIcon className="h-3 w-3" /> Draft with AI
-                </span>
+                </button>
               </div>
             </div>
           </>

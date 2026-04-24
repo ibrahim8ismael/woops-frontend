@@ -423,8 +423,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         </AnimatePresence>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-slate-50/50 p-6 md:p-8">
-          <div className="mx-auto max-w-6xl">
+        <main className={cn(
+          "flex-1 bg-slate-50/50",
+          pathname.includes("/conversations") ? "p-0 overflow-hidden" : "p-6 md:p-8 overflow-y-auto"
+        )}>
+          <div className={cn("mx-auto", pathname.includes("/conversations") ? "max-w-none h-full" : "max-w-6xl")}>
             {children}
           </div>
         </main>
